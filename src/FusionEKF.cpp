@@ -106,6 +106,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
         ekf_.x_(1) = measurement_pack.raw_measurements_(1);
     }
 
+    // Set Time Stamp for Initialisation
+    previous_timestamp_ = measurement_pack.timestamp_;
+    
     // done initializing, no need to predict or update
     is_initialized_ = true;
     return;
@@ -132,20 +135,19 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
   ekf_.F_(1,3) = dt;
   
   // update process noise covariance matrix
+  // sigma2ax and sigma2ay is the varaince of ax and ay
   float noise_ax = 9;
   float noise_ay = 9;
   
   float dt_2 = dt * dt;
   float dt_3 = dt_2 * dt;
   float dt_4 = dt_3 * dt;
-  
-  float sigma_ax_2 = noise_ax * noise_ax;
-  float sigma_ay_2 = noise_ay * noise_ay;
-  
-  ekf_.Q_ << (dt_4 / 4) * sigma_ax_2, 0, (dt_3 / 2) * sigma_ax_2, 0,
-             0, (dt_4 / 4) * sigma_ay_2, 0, (dt_3 / 2) * sigma_ay_2,
-             (dt_3 / 2) * sigma_ax_2, 0, dt_2 * sigma_ax_2, 0,
-             0, (dt_3 / 2) * sigma_ay_2, 0, dt_2 * sigma_ay_2;
+
+  ekf_.Q_ = MatrixXd(4, 4);
+  ekf_.Q_ << dt_4 / 4 * noise_ax, 0, dt_3 / 2 * noise_ax, 0,
+             0, dt_4 / 4 * noise_ay, 0, dt_3 / 2 * noise_ay,
+             dt_3 / 2 * noise_ax, 0, dt_2 * noise_ax, 0,
+             0, dt_3 / 2 * noise_ay, 0, dt_2 * noise_ay;
   
   ekf_.Predict();
 
@@ -178,7 +180,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     ekf_.H_ = H_laser_;
     
     // Update co-variance
-    ekf_.R_ = R_radar_;
+    ekf_.R_ = R_laser_;
       
     // call kalman filter LIDAR update function with measurement data
     ekf_.Update(measurement_pack.raw_measurements_);
