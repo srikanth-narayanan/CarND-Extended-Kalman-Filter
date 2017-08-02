@@ -55,7 +55,10 @@ FusionEKF::FusionEKF() {
   
   // State Co-Variance Matrix P
   ekf_.P_ = MatrixXd(4, 4);
-  
+  ekf_.P_ << 1, 0, 0, 0,
+             0, 1, 0, 0,
+             0, 0, 1000, 0,
+             0, 0, 0, 1000;
 
 }
 
@@ -162,6 +165,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     // Get new jacobian Matrix
     ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
     
+    // Update Co-Variance
+    ekf_.R_ = R_radar_;
+    
     // call kalman filter ekf funciton for RADAR measurment
     ekf_.UpdateEKF(measurement_pack.raw_measurements_);
     
@@ -171,11 +177,14 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     // update measurment matrix
     ekf_.H_ = H_laser_;
     
+    // Update co-variance
+    ekf_.R_ = R_radar_;
+      
     // call kalman filter LIDAR update function with measurement data
     ekf_.Update(measurement_pack.raw_measurements_);
   }
 
   // print the output
-  cout << "x_ = " << ekf_.x_ << endl;
-  cout << "P_ = " << ekf_.P_ << endl;
+  std::cout << "x_ = " << ekf_.x_ << endl;
+  std::cout << "P_ = " << ekf_.P_ << endl;
 }

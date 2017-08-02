@@ -1,4 +1,5 @@
 #include "kalman_filter.h"
+#include <math.h>
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
@@ -26,7 +27,8 @@ void KalmanFilter::Predict() {
     x_ = F_ * x_;
     
     // new postion
-    P_ = F_ * P_ * F_.transpose() + Q_;
+    MatrixXd Ft = F_.transpose();
+    P_ = F_ * P_ * Ft + Q_;
 }
 
 void KalmanFilter::Update(const VectorXd &z) {
@@ -37,8 +39,10 @@ void KalmanFilter::Update(const VectorXd &z) {
     // Predicted Measurement Vector
     VectorXd z_pred = H_ * x_;
     VectorXd y = z - z_pred;
-    MatrixXd S = H_ * P_ * H_.transpose() + R_;
-    MatrixXd K = P_ * H_.transpose() * S.inverse();
+    MatrixXd Ht = H_.transpose();
+    MatrixXd S = H_ * P_ * Ht + R_;
+    MatrixXd Si = S.inverse();
+    MatrixXd K = P_ * Ht * Si;
     
     // New Estimate
     x_ = x_ + K * y;
@@ -53,4 +57,26 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
   TODO:
     * update the state by using Extended Kalman Filter equations
   */
+    // predicted Measurment Vector
+    float rho = sqrt((x_(0) * x_(0)) + (x_(1) * x_(1)));
+    float phi = atan2(x_(1), x_(0));
+    float rho_dot = (x_(0) * x_(2)) + (x_(1) * x_(3)) / rho;
+    
+    VectorXd z_pred(3);
+    z_pred << rho, phi, rho_dot;
+    VectorXd y = z - z_pred;
+    MatrixXd Ht = H_.transpose();
+    MatrixXd S = H_ * P_ * Ht + R_;
+    MatrixXd Si = S.inverse();
+    MatrixXd K = P_ * Ht * Si;
+    
+    // New Estimate
+    x_ = x_ + K * y;
+    
+    long x_size = x_.size();
+    MatrixXd I = MatrixXd::Identity(x_size, x_size);
+    P_ = (I - K * H_) * P_;
+    
 }
+
+

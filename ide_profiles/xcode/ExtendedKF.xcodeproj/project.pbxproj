@@ -71,7 +71,6 @@
 		5E50A63B98EB43C7B4BCFC74 /* tools.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = tools.h; path = src/tools.h; sourceTree = SOURCE_ROOT; };
 		715CDE393C374A908FB0466B /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
 		730B731D06F249CCB72CB3F2 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
-		759607021F2DA73E0068688F /* measurement_package.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = measurement_package.h; path = src/measurement_package.h; sourceTree = "<group>"; };
 		769DCCDFEC934456B879079B /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
 		941B9BA6F9684F0FBC09FE01 /* tools.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = tools.cpp; path = src/tools.cpp; sourceTree = SOURCE_ROOT; };
 		AB30ECB6F294493886F6AF44 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
@@ -133,7 +132,6 @@
 		AF1AC7C7049B4A17B1F84517 /* Header Files */ = {
 			isa = PBXGroup;
 			children = (
-				759607021F2DA73E0068688F /* measurement_package.h */,
 				135B3107BC2749EF95ECF495 /* FusionEKF.h */,
 				B747642CE0404EBAAA50953C /* kalman_filter.h */,
 				5E50A63B98EB43C7B4BCFC74 /* tools.h */,
