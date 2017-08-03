@@ -63,7 +63,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "../../../data/obj_pose-laser-radar-synthetic-input.txt ../../../data/output.txt"
+            argument = "../../data/obj_pose-laser-radar-synthetic-input.txt ../../data/output.txt"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
