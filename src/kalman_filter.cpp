@@ -60,7 +60,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     * update the state by using Extended Kalman Filter equations
   */
     // predicted Measurment Vector
-    float rho = sqrt((x_(0) * x_(0)) + (x_(1) * x_(1)));
+    float rho = sqrt(x_(0) * x_(0) + x_(1) * x_(1));
     float phi, rho_dot;
     
     // Checking for division by zero
@@ -73,7 +73,7 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     else
     {
         phi = atan2(x_(1), x_(0));
-        rho_dot = (x_(0) * x_(2)) + (x_(1) * x_(3)) / rho;
+        rho_dot = ((x_(0) * x_(2)) + (x_(1) * x_(3))) / rho;
     }
     
     
@@ -91,7 +91,6 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     {
         y(1) -= 2 * M_PI;
     }
-
     
     MatrixXd Ht = H_.transpose();
     MatrixXd S = H_ * P_ * Ht + R_;
